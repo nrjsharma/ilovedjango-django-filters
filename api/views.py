@@ -4,6 +4,8 @@ from api.serializer import ViewPostSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from myapp.models import Post
+from api.filters import PostFilter
+
 
 class IsAuthorFilterBackend(filters.BaseFilterBackend):
     """
@@ -28,7 +30,8 @@ class ViewPostViewSet(ModelViewSet):
     filterset_fields = {
         "title": ["icontains", "startswith"],
         "author__email": ["icontains", ],  # ForeignKey
-        "is_active": ["exact", ]  # BooleanField
+        "is_active": ["exact", ],  # BooleanField
+        "created_at__date": ["exact", ]  # DateTimeField
     }
 
     # SearchFilter
@@ -59,6 +62,21 @@ class UserPostsViewSet(ModelViewSet):
     filter_backends = [
         IsAuthorFilterBackend,
     ]
+
+    def get_queryset(self):
+        return Post.objects.all()
+
+
+class CustomPostsViewSet(ModelViewSet):
+    serializer_class = ViewPostSerializer
+    permission_classes = (AllowAny, )
+    http_method_names = ['get', ]
+
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+
+    filterset_class = PostFilter
 
     def get_queryset(self):
         return Post.objects.all()
