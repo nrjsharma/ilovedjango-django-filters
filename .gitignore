@@ -112,3 +112,5 @@ celerybeat-schedule
 
 worker.log
 beat.log
+
+db.sqlite3
