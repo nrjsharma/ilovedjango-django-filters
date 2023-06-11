@@ -1,1 +1,1 @@
-# ilovedjango-django-filters
+# Django Filters
