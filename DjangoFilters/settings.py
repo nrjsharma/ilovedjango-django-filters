@@ -20,7 +20,8 @@ INSTALLED_APPS = [
     'rest_framework',
     # Django Filters
     'django_filters',
-    'myapp'
+    'myapp',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -94,11 +95,3 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-
-REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter',
-    ),
-}
