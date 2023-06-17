@@ -31,7 +31,7 @@ class ViewPostViewSet(ModelViewSet):
         "title": ["icontains", "startswith"],
         "author__email": ["icontains", ],  # ForeignKey
         "is_active": ["exact", ],  # BooleanField
-        "created_at__date": ["exact", ]  # DateTimeField
+        "created_at": ["date__exact", ]  # DateTimeField
     }
 
     # SearchFilter
