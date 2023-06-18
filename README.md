@@ -1,5 +1,12 @@
 # Filters in Django Rest Framework
 
+<p align="center">
+    <picture>
+      <img alt="Filters in Django Rest Framework" title="Filters in Django Rest Framework" src="https://www.dropbox.com/s/2tvucgspajwvjxi/ilovedjango-m.png?dl=0">
+    </picture>
+</p>
+
+
 ### Install
 
 ```shell
@@ -13,7 +20,7 @@ pyenv activate djangofilters
 pip install -r requirements.txt
 ```
 
-### Run Locally
+### Run
 
 ```shell
 # run migrations
@@ -34,8 +41,8 @@ To configure Django filters in your Django project, you need to install django-f
 ```shell
 pip install django-filter
 ```
-And then define the django filters in INSTALLED_APPS in settings.py file
-settings.py
+And then define the django filters in ``INSTALLED_APPS`` in ``settings.py`` file
+
 ```python
 INSTALLED_APPS = [
     ...
@@ -44,4 +51,117 @@ INSTALLED_APPS = [
     # Django Filters
     'django_filters',
 ]
+```
+You can set the default filter backend in ``settings.py`` file. Then these filters are set globally for all the View or ViewSet.
+```python
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ),
+}
+```
+You can also set the filter backend to an individual View or ViewSet.
+```python
+from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+class MyModelViewSet(ModelViewSet):
+
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+```
+# DjangoFilterBackend
+The `DjangoFilterBackend` class is used to filter the queryset according to a specified set of fields. By automatically generating a FilterSet class for the specified field.
+```python
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny
+from api.serializer import ViewPostSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from myapp.models import Post
+
+
+class ViewPostViewSet(ModelViewSet):
+    serializer_class = ViewPostSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ['get', ]
+
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+
+    filterset_fields = {
+        "title": ["icontains", "startswith"],
+        "author__email": ["icontains", ],  # ForeignKey
+        "is_active": ["exact", ],  # BooleanField
+        "created_at": ["date__exact", ]  # DateTimeField
+    }
+
+    def get_queryset(self):
+        return Post.objects.all()
+```
+
+# SearchFilter
+
+The `SearchFilter` class supports simple single query parameter-based searching
+
+```python
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny
+from api.serializer import ViewPostSerializer
+from myapp.models import Post
+from rest_framework import filters
+
+
+class ViewPostViewSet(ModelViewSet):
+    serializer_class = ViewPostSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ['get', ]
+
+    filter_backends = [
+        filters.SearchFilter,
+    ]
+
+    # Search Behavior
+    # '^' Starts with search.
+    # '=' Exact matches search.
+    # '@' Full-text search. (Supported only in Django's PostgreSQL backend.)
+    # '$' Regex search.
+
+    search_fields = ['^title', '=author__email']
+
+    def get_queryset(self):
+        return Post.objects.all()
+```
+# OrderingFilter
+The `OrderingFilter` class allows you to order the queryset result according to a specified set of fields.
+```python
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny
+from api.serializer import ViewPostSerializer
+from myapp.models import Post
+from rest_framework import filters
+
+
+class ViewPostViewSet(ModelViewSet):
+    serializer_class = ViewPostSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ['get', ]
+
+    filter_backends = [
+        filters.OrderingFilter,
+    ]
+
+    ordering_fields = ['id', 'author_id']
+
+    # Default ordering
+    ordering = ['-id']
+
+    def get_queryset(self):
+        return Post.objects.all()
 ```
