@@ -21,7 +21,7 @@ python manage.py migrate
 # run server
 python manage.py runserver 0:8000
 ```
-# Filters
+# Overview
 
 Django REST Framework list view by default returns entire query sets for the model. We use filters provided by Django to filter out the queryset.
 
@@ -29,3 +29,19 @@ Django REST Framework list view by default returns entire query sets for the mod
 - SearchFilter
 - OrderingFilter
 
+## Installation
+To configure Django filters in your Django project, you need to install django-filter packages
+```shell
+pip install django-filter
+```
+And then define the django filters in INSTALLED_APPS in settings.py file
+settings.py
+```python
+INSTALLED_APPS = [
+    ...
+    # Django REST framework
+    'rest_framework',
+    # Django Filters
+    'django_filters',
+]
+```
