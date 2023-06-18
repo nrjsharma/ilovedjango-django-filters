@@ -2,7 +2,9 @@
 
 <p align="center">
     <picture>
-      <img alt="Filters in Django Rest Framework" title="Filters in Django Rest Framework" src="https://www.dropbox.com/s/2tvucgspajwvjxi/ilovedjango-m.png?dl=0">
+      <source media="(prefers-color-scheme: dark)" srcset="ilovedjango.png">
+      <source media="(prefers-color-scheme: light)" srcset="ilovedjango.png">
+      <img alt="Filters in Django Rest Framework" width="350px" title="Filters in Django Rest Framework" src="ilovedjango.png">
     </picture>
 </p>
 
@@ -165,3 +167,4 @@ class ViewPostViewSet(ModelViewSet):
     def get_queryset(self):
         return Post.objects.all()
 ```
+Learn [more](https://ilovedjango.com/django/rest-api-framework/filters-in-django-rest-framework/) about Filter in Django Rest Framework
