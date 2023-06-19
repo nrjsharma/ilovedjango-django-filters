@@ -39,7 +39,7 @@ Django REST Framework list view by default returns entire query sets for the mod
 - OrderingFilter
 
 ## Installation
-To configure Django filters in your Django project, you need to install django-filter packages
+To configure Django filters in your Django project, you need to install `django-filter` packages
 ```shell
 pip install django-filter
 ```
